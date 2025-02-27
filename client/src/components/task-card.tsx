@@ -122,6 +122,14 @@ export function TaskCard({ task }: TaskCardProps) {
             </Badge>
           )}
         </div>
+        {task.createdAt && (
+          <div className="mt-2 text-xs text-muted-foreground">
+            Created {format(new Date(task.createdAt), "PPp")}
+            {task.updatedAt && task.updatedAt !== task.createdAt && (
+              <> · Updated {format(new Date(task.updatedAt), "PPp")}</>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

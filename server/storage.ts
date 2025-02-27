@@ -27,11 +27,14 @@ export class MemStorage implements IStorage {
 
   async createTask(insertTask: InsertTask): Promise<Task> {
     const id = this.currentId++;
+    const now = new Date();
     const task: Task = {
       ...insertTask,
       id,
       completed: false,
       deadline: insertTask.deadline ? new Date(insertTask.deadline) : null,
+      createdAt: now,
+      updatedAt: now,
     };
     this.tasks.set(id, task);
     return task;
@@ -47,6 +50,7 @@ export class MemStorage implements IStorage {
       ...existing,
       ...updateTask,
       deadline: updateTask.deadline ? new Date(updateTask.deadline) : existing.deadline,
+      updatedAt: new Date(),
     };
     this.tasks.set(id, updated);
     return updated;

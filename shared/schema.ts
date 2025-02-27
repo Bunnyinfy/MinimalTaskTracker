@@ -10,10 +10,12 @@ export const tasks = pgTable("tasks", {
   category: text("category").notNull(),
   deadline: timestamp("deadline"),
   completed: boolean("completed").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const insertTaskSchema = createInsertSchema(tasks)
-  .omit({ id: true, completed: true })
+  .omit({ id: true, completed: true, createdAt: true, updatedAt: true })
   .extend({
     priority: z.number().min(1).max(3),
     title: z.string().min(1, "Title is required").max(100),
