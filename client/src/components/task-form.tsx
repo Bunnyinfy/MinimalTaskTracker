@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { notificationService } from "@/lib/notificationService";
 
 interface TaskFormProps {
   task?: Task;
@@ -27,6 +28,7 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
       priority: 2,
       category: "personal",
       deadline: "",
+      reminderMinutes: null,
     },
   });
 
@@ -35,8 +37,10 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
       const res = await apiRequest("POST", "/api/tasks", data);
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: async (newTask: Task) => {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
+      await notificationService.requestPermission();
+      notificationService.scheduleNotification(newTask);
       toast({ title: "Task created successfully" });
       onSuccess?.();
     },
@@ -50,8 +54,10 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
       const res = await apiRequest("PATCH", `/api/tasks/${task!.id}`, data);
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: async (updatedTask: Task) => {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
+      await notificationService.requestPermission();
+      notificationService.scheduleNotification(updatedTask);
       toast({ title: "Task updated successfully" });
       onSuccess?.();
     },
@@ -158,6 +164,34 @@ export function TaskForm({ task, onSuccess }: TaskFormProps) {
               <FormControl>
                 <Input type="datetime-local" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="reminderMinutes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Reminder</FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(value ? parseInt(value) : null)}
+                defaultValue={field.value?.toString() || ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="No reminder" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="">No reminder</SelectItem>
+                  <SelectItem value="15">15 minutes before</SelectItem>
+                  <SelectItem value="30">30 minutes before</SelectItem>
+                  <SelectItem value="45">45 minutes before</SelectItem>
+                  <SelectItem value="60">1 hour before</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
