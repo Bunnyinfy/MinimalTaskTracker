@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Redirect } from "wouter";
 import { motion } from "framer-motion";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
@@ -42,7 +43,10 @@ export default function AuthPage() {
         className="flex-1 flex items-center justify-center p-8"
       >
         <Card className="w-full max-w-md">
-          <CardHeader>
+          <CardHeader className="relative">
+            <div className="absolute right-6 top-6">
+              <ThemeSwitcher />
+            </div>
             <CardTitle>Welcome to Task Manager</CardTitle>
             <CardDescription>Sign in to your account or create a new one</CardDescription>
           </CardHeader>
@@ -52,7 +56,7 @@ export default function AuthPage() {
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="login">
                 <Form {...loginForm}>
                   <form onSubmit={loginForm.handleSubmit((data) => loginMutation.mutate(data))} className="space-y-4">
@@ -128,7 +132,7 @@ export default function AuthPage() {
           </CardContent>
         </Card>
       </motion.div>
-      
+
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
