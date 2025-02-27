@@ -70,25 +70,6 @@ A full-stack web application for managing tasks with user authentication, priori
 - `/shared` - Shared types and schemas
 - `schema.ts` - Database schema and validation using Drizzle and Zod
 
-## Development
-
-### Database Migrations
-```
-npm run db:push
-```
-
-### Building for Production
-```
-npm run build
-```
-
-### Running in Production
-```
-npm run start
-```
-
-## Deployment
-
 This application is configured for deployment on Replit:
 
 1. Create a new Repl with this repository
