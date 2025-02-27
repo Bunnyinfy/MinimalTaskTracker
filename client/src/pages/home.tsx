@@ -1,14 +1,16 @@
 import { TaskList } from "@/components/task-list";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, LogOut } from "lucide-react";
 import { TaskForm } from "@/components/task-form";
 import { useState } from "react";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
+  const { logoutMutation } = useAuth();
 
   return (
     <motion.div
@@ -27,6 +29,15 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <h1 className="text-3xl font-bold text-foreground">Tasks</h1>
             <ThemeSwitcher />
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => logoutMutation.mutate()}
+              className="transition-colors hover:bg-destructive/10"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="sr-only">Logout</span>
+            </Button>
           </div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
