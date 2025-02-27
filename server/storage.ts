@@ -29,6 +29,7 @@ export class MemStorage implements IStorage {
   readonly sessionStore: session.Store;
 
   constructor() {
+    // Reset all storage
     this.tasks = new Map();
     this.users = new Map();
     this.currentTaskId = 1;
@@ -110,4 +111,5 @@ export class MemStorage implements IStorage {
   }
 }
 
+// Create a fresh instance of storage
 export const storage = new MemStorage();
