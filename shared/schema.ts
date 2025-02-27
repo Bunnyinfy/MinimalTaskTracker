@@ -20,7 +20,6 @@ export const tasks = pgTable("tasks", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   userId: integer("user_id").notNull().references(() => users.id),
-  reminderMinutes: integer("reminder_minutes"),
 });
 
 export const insertUserSchema = createInsertSchema(users)
@@ -37,7 +36,6 @@ export const insertTaskSchema = createInsertSchema(tasks)
     title: z.string().min(1, "Title is required").max(100),
     category: z.string().min(1, "Category is required"),
     deadline: z.string().optional().nullable(),
-    reminderMinutes: z.number().optional().nullable(),
   });
 
 export type User = typeof users.$inferSelect;

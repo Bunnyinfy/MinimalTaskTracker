@@ -3,20 +3,11 @@ import { Task } from "@shared/schema";
 import { TaskCard } from "./task-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
-import { notificationService } from "@/lib/notificationService";
 
 export function TaskList() {
   const { data: tasks, isLoading } = useQuery<Task[]>({
     queryKey: ["/api/tasks"],
   });
-
-  useEffect(() => {
-    if (tasks) {
-      notificationService.startCheckingDeadlines(tasks);
-    }
-    return () => notificationService.stopCheckingDeadlines();
-  }, [tasks]);
 
   if (isLoading) {
     return (
